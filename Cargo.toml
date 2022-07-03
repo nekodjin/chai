@@ -5,4 +5,6 @@ edition = "2021"
 authors = ["Avery R. <contact@nekodjin.org>"]
 
 [dependencies]
-
+logos = "0.12.1"
+ariadne = "0.1.5"
+chumsky = "0.8.0"

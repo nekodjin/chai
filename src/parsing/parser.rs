@@ -7,14 +7,11 @@ use model::ast::*;
 use parsing::token::Token;
 
 pub fn parser() -> impl Parser<Token, Module, Error = Simple<Token>> {
-    module()
+    module().then_ignore(end())
 }
 
 fn module() -> impl Parser<Token, Module, Error = Simple<Token>> {
-    member()
-        .repeated()
-        .map(|members| Module { members })
-        .then_ignore(end())
+    member().repeated().map(|members| Module { members })
 }
 
 fn member() -> impl Parser<Token, Member, Error = Simple<Token>> {
@@ -40,8 +37,8 @@ fn func() -> impl Parser<Token, Func, Error = Simple<Token>> {
 
 fn stmt() -> impl Parser<Token, Stmt, Error = Simple<Token>> {
     choice((
-        expr_stmt().map(Stmt::ExprStmt),
         var_decl().map(Stmt::VarDecl),
+        expr_stmt().map(Stmt::ExprStmt),
     ))
 }
 
@@ -73,7 +70,7 @@ fn expr() -> impl Parser<Token, Expr, Error = Simple<Token>> {
     recursive(|expr| {
         let expr = || expr.clone();
 
-        choice((var(), func_call(expr()), assign(expr())))
+        choice((func_call(expr()), assign(expr()), var()))
     })
 }
 

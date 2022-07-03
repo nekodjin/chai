@@ -99,13 +99,12 @@ fn func_call(
 fn assign(
     expr: impl Clone + Parser<Token, Expr, Error = Simple<Token>>,
 ) -> impl Parser<Token, Expr, Error = Simple<Token>> {
-    var()
-        .then_ignore(just(Token::Eq))
-        .then(expr)
-        .map(|(target, value)| Expr::Assign {
-            target: Box::new(target),
+    ident().then_ignore(just(Token::Eq)).then(expr).map(
+        |(target, value)| Expr::Assign {
+            target,
             value: Box::new(value),
-        })
+        },
+    )
 }
 
 fn ident() -> impl Parser<Token, String, Error = Simple<Token>> {

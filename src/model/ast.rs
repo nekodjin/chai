@@ -40,5 +40,5 @@ pub struct Decl {
 pub enum Expr {
     Var(String),
     FuncCall { func: Box<Expr>, args: Vec<Expr> },
-    Assign { target: Box<Expr>, value: Box<Expr> },
+    Assign { target: String, value: Box<Expr> },
 }
